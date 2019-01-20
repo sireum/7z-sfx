@@ -12,3 +12,5 @@ a.out
 strace.out
 tags
 minidiet.o
+/.idea
+/cmake-build-debug
