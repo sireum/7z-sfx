@@ -334,6 +334,10 @@ static Bool IsFilenameSafe(const char *p) {
 #define STRCMP1(p, c) (((const Byte*)(p))[0] == (c) && ((const Byte*)(p))[1] == 0)
 #endif
 
+void title(void) {
+    WriteMessage("Tiny 7z extractor " MY_VERSION "\n");
+}
+
 int MY_CDECL main(int numargs, char *args[])
 {
   CLookToRead lookStream;
@@ -355,6 +359,7 @@ int MY_CDECL main(int numargs, char *args[])
     argi = 0;
    exit_with_usage:
     muted = 0;
+    title();
     WriteMessage("\nUsage: ");
     WriteMessage(args[0]);
     WriteMessage(" [<command>] [<switch>...] [<archive.7z>]\n\n"
@@ -421,6 +426,7 @@ int MY_CDECL main(int numargs, char *args[])
   }
   if (!archive) archive = args[0];  /* Self-extract (sfx). */
 
+  title();
   WriteMessage("Tiny 7z extractor " MY_VERSION "\n");
   WriteMessage("\nProcessing archive: ");
   WriteMessage(archive);
