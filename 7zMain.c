@@ -65,9 +65,11 @@ static Bool Utf16Le_To_Utf8(Byte *dest, size_t *destLen, const Byte *srcUtf16Le,
 
 static char stdout_buf[4096];
 static unsigned stdout_bufc = 0;
+static int muted = 1;
 
 /* Writes NUL-terminated string sz to stdout, does line buffering. */
 static void WriteMessage(const char *sz) {
+  if (muted) return;
   char had_newline = False, c;
   while ((c = *sz++) != '\0') {
     if (stdout_bufc == sizeof stdout_buf) {
@@ -85,9 +87,11 @@ static void WriteMessage(const char *sz) {
 
 STATIC void PrintError(const char *sz)
 {
+  int oldMuted = muted;
   WriteMessage("\nERROR: ");
   WriteMessage(sz);
   WriteMessage("\n");
+  muted = oldMuted;
 }
 
 /* Returns *a % b, and sets *a = *a_old / b; */
@@ -346,21 +350,22 @@ int MY_CDECL main(int numargs, char *args[])
   int argi = 1;
   const char *args1 = numargs >= 2 ? args[1] : "";
 
-  WriteMessage("Tiny 7z extractor " MY_VERSION "\n");
   if ((args1[0] == '-' && args1[1] == 'h' && args1[2] == '\0') ||
       IS_HELP(args1)) {
     argi = 0;
    exit_with_usage:
+    muted = 0;
     WriteMessage("\nUsage: ");
     WriteMessage(args[0]);
     WriteMessage(" [<command>] [<switch>...] [<archive.7z>]\n\n"
-        "Commands:\n"
-        "  l or v: List contents of archive.\n"
-        "  t: Test integrity of archive.\n"
-        "  x: eXtract files with full pathname (default).\n"
-        "Switches:\n"
-        "  -e<archive.7z>: archive to extract (default is self, argv[0]).\n"
-        "  -y: assume Overwrite files.\n");
+                 "Commands:\n"
+                 "  l or v: List contents of archive.\n"
+                 "  t: Test integrity of archive.\n"
+                 "  x: eXtract files with full pathname (default).\n"
+                 "Switches:\n"
+                 "  -e<archive.7z>: archive to extract (default is self, argv[0]).\n"
+                 "  -v: verbose.\n"
+                 "  -y: assume Overwrite files.\n");
     return argi;
   }
   if (numargs >= 2 && args1[0] != '-') {
@@ -392,6 +397,12 @@ int MY_CDECL main(int numargs, char *args[])
         ++arg;
         goto same_arg;
       }
+    } else if (arg[1] == 'v') {
+      muted = 0;
+      if (arg[2] != '\0') {
+        ++arg;
+        goto same_arg;
+      }
     } else {
       PrintError("incorrect switch");
       argi = 1; goto exit_with_usage;
@@ -410,6 +421,7 @@ int MY_CDECL main(int numargs, char *args[])
   }
   if (!archive) archive = args[0];  /* Self-extract (sfx). */
 
+  WriteMessage("Tiny 7z extractor " MY_VERSION "\n");
   WriteMessage("\nProcessing archive: ");
   WriteMessage(archive);
   WriteMessage("\n");
