@@ -42,4 +42,8 @@
 
 #endif  /* USE_MINIINC1 */
 
+#if defined(__APPLE__) && defined(__MACH__)
+#define lseek64 lseek
+#endif
+
 #endif
