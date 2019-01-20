@@ -165,12 +165,11 @@ Typical contents of config.txt:
 If the setting RunProgram="..." or ExecuteFile="..." is specified in the
 config file, then the installer will run this command after extraction.
 
-pts-tiny-7z-sfx doesn't provide an installer. In fact, if tiny7zx is used as
-installer.sfx, then the contents of config.txt will be ignored after the
-extraction, and commands will not be run.
+Instead of using a configuration, this program executes "./setup" after
+extraction if setup is executable. That is, to build an installer, just
+include an executable script/binary named "setup" in the archive's
+top-level directory.
 
-See also https://github.com/pts/pts-tiny-7z-sfx/issues/1 about building an
-installer (tiny7zi).
 
 License
 ~~~~~~~
