@@ -642,11 +642,13 @@ int MY_CDECL main(int numargs, char *args[])
 
   close(lookStream.fd);
   if (res == SZ_OK) {
+    #ifdef USE_INSTALLER
     struct stat sb;
     if (stat("setup", &sb) == 0 && sb.st_mode & S_IXUSR) {
       execl("/bin/sh", "sh", "-c", "./setup", (char *)0);
       unlink("setup");
     }
+    #endif
     WriteMessage("\ntiny7zx OK.\n");
     return 0;
   } else if (res == SZ_ERROR_UNSUPPORTED) {

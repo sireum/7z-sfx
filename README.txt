@@ -165,10 +165,10 @@ Typical contents of config.txt:
 If the setting RunProgram="..." or ExecuteFile="..." is specified in the
 config file, then the installer will run this command after extraction.
 
-Instead of using a configuration, this program executes "./setup" after
-extraction if setup is executable. That is, to build an installer, just
-include an executable script/binary named "setup" in the archive's
-top-level directory.
+Instead of using a configuration, this program (compiled using c-dynamics.sh)
+executes "./setup" after extraction if setup is executable.
+That is, to build an installer, just include an executable script/binary
+named "setup" in the archive's top-level directory.
 
 
 License
