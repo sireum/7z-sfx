@@ -88,6 +88,7 @@ static void WriteMessage(const char *sz) {
 STATIC void PrintError(const char *sz)
 {
   int oldMuted = muted;
+  muted = 0;
   WriteMessage("\nERROR: ");
   WriteMessage(sz);
   WriteMessage("\n");
@@ -350,7 +351,7 @@ int MY_CDECL main(int numargs, char *args[])
   unsigned umaskv = -1;
   const char *archive = NULL;
   Byte command = 'x';
-  Bool doYes = 0;
+  Bool doYes = 1;
   int argi = 1;
   const char *args1 = numargs >= 2 ? args[1] : "";
 
@@ -370,7 +371,7 @@ int MY_CDECL main(int numargs, char *args[])
                  "Switches:\n"
                  "  -e<archive.7z>: archive to extract (default is self, argv[0]).\n"
                  "  -v: verbose.\n"
-                 "  -y: assume Overwrite files.\n");
+                 "  -y: do not overwrite files.\n");
     return argi;
   }
   if (numargs >= 2 && args1[0] != '-') {
@@ -397,7 +398,7 @@ int MY_CDECL main(int numargs, char *args[])
     if (arg[1] == 'e') {
       archive = arg + 2;
     } else if (arg[1] == 'y') {
-      doYes = 1;
+      doYes = 0;
       if (arg[2] != '\0') {
         ++arg;
         goto same_arg;
@@ -427,7 +428,6 @@ int MY_CDECL main(int numargs, char *args[])
   if (!archive) archive = args[0];  /* Self-extract (sfx). */
 
   title();
-  WriteMessage("Tiny 7z extractor " MY_VERSION "\n");
   WriteMessage("\nProcessing archive: ");
   WriteMessage(archive);
   WriteMessage("\n");
@@ -667,7 +667,7 @@ int MY_CDECL main(int numargs, char *args[])
     PrintError("input file is not a .7z archive");
     if (archive == args[0]) { argi = 1; goto exit_with_usage; }
   } else if (res == SZ_ERROR_OVERWRITE) {
-    PrintError("already exists, specify -y to overwrite");
+    PrintError("already exists");
   } else if (res == SZ_ERROR_WRITE_OPEN) {
     PrintError("can not open output file");
   } else if (res == SZ_ERROR_WRITE_CHMOD) {

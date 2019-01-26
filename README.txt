@@ -108,11 +108,11 @@ Supported systems:
 
 * Linux i386 without libc (recommended): compile with ./c-minidiet.sh
   Recommeded compiler is gcc-4.8 or later.
-* Linux with glibc: compile with ./c-dynamic.sh
+* Linux with glibc: compile with ./c-static.sh
 * Linux with dietlibc: compile with ./c-diet.sh
 * Linux i386 with xstatic uClibc: compile with ./c-xstatic.sh
-* macOS: compile with ./c-dynamic.sh
-* other Unix: ./c-dynamic.sh probably works, maybe needs minor porting
+* macOS: compile with ./c-static.sh
+* other Unix: ./c-static.sh probably works, maybe needs minor porting
 * Windows: not supported.
 
 Memory usage

@@ -5,7 +5,7 @@ tiny7zx.xstatic
 tiny7zx.xstatic.unc
 tiny7zx.diet
 tiny7zx.diet.unc
-tiny7zx.dynamic
+tiny7zx.static
 all.o
 all.s
 a.out
